@@ -1,0 +1,50 @@
+Arrancar aplicacion
+meteor run --port 8080
+
+
+Data table edicion en celda
+
+DATA TABLE editable con dos FOR .
+https://www.codeply.com/p/CMcTQVlHvp/vuetify-editable-datatable
+
+Ajustar
+<tr v-for="(item,idx,k) in items" :key="idx">
+                            <td v-for="(header,key) in headers" :key="key">
+                                <v-edit-dialog
+                                  :return-value.sync="item[header.value]"
+                                  @save="save(item,key)"
+                                  @cancel="cancel(item,key)"
+                                  @open="open(item,key)"
+                                  @close="close"
+                                  large
+Y    
+ methods: {
+    save(item,key) {
+        // Si es numero guardar y calculamos
+        // De lo contrario guardamos el del editado y mandamos mensaje
+    },
+    cancel(item,key) {
+        guardamos el del editado y mandamos mensaje
+    },
+    open(item,key) {
+        // Asignar a un objeto edit
+        alert(item.id)
+        alert(key)
+    },
+
+Con esto calculamos la logica de calculo
+
+Editando con un for la celda en linea
+https://www.codeply.com/p/0zchlJGypn
+
+
+
+Editamdo la celda con confirmacion
+https://www.codeply.com/p/CMcTQVlHvp/vuetify-editable-datatable
+
+
+https://codepen.io/Jayesh_v/pen/wvgjMva
+
+RENDER DEL FOR
+
+https://vuejs.org/guide/essentials/list.html
