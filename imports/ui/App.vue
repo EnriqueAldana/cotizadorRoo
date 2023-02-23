@@ -1,8 +1,7 @@
 <template>
 
-  
   <v-app>
-    
+    <!-- Inicio barra principal-->
     <v-card 
     flat>
       <v-toolbar
@@ -22,12 +21,14 @@
       </v-toolbar>
       <br>
       <br>
-      <v-card
-        class="mx-auto"
-        max-width="1400"
-        style="margin-top: -64px;"
-        
-      >
+    </v-card>
+    <!-- Fin barra principal-->
+    <!-- Inicio barra de aplicacion-->
+<v-card
+  class="mx-auto"
+  max-width="1600"
+  style="margin-top: -64px;"
+>
         <v-toolbar flat>
           <v-toolbar-title class="text-grey">
             Cotizador de Medias y Calcetines
@@ -39,7 +40,7 @@
             <v-icon>mdi-help</v-icon>
           </v-btn>
   
-          <v-btn icon>
+          <v-btn icon @click="openAlert">
             <v-icon>mdi-restart</v-icon>
           </v-btn>
   
@@ -49,11 +50,17 @@
         </v-toolbar>
   
         <v-divider></v-divider>
-  
-        <v-card-text style="height: 1200px;">
-          <v-card title="Card title" 
-          subtitle="Subtitle">
-          <v-sheet width="1000" class="mx-auto">
+        
+        <v-card-text style="height: 1400px;">
+            <v-card
+            class="mx-auto"
+            width="1400"
+            prepend-icon="mdi-home"
+            >
+            <v-card-text>
+              <h3>Datos del cliente</h3>
+              <!-- Inicio campos datos cliente-->
+          <v-sheet width="1400" class="mx-auto">
             <v-form fast-fail @submit.prevent>
               <v-row>
                 <v-col
@@ -99,67 +106,49 @@
               ></v-text-field>
             </v-col>
           </v-row>
-      
-            </v-form>
+         </v-form>
           </v-sheet>
-        </v-card>
-          <!-- Inicia montos-->
-          <v-card class="mt-5 mb-8"
-          title="Montos de la cotización" 
-          subtitle="Calcula de acuerdo al llenado de las cantidades en la tabla"
-          >
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-card
-                      class="pa-2"
-                      outlined
-                      tile
-                    >
-                      <h3>Los montos de su cotización son como sigue:</h3>
-                    </v-card>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="4">
-                    <v-card
-                      class="pa-2"
-                      outlined
-                      tile
-                    >
-                    <h3>Sub total: {{ subtotal }}</h3>
-                    </v-card>
-                  </v-col>
-                  <v-col cols="4">
-                    <v-card
-                      class="pa-2"
-                      outlined
-                      tile
-                    >
-                    <h3>I.V.A. 16% : {{ iva }}</h3>
-                    </v-card>
-                  </v-col>
-                  <v-col cols="4">
-                    <v-card
-                      class="pa-2"
-                      outlined
-                      tile
-                    >
-                    <h3>Total: {{ total }}</h3>
-                    </v-card>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-          </v-card>
-          <!-- Fin montos-->
+          <!-- Fin campos datos clientes-->
+          <h3>Montos de la cotización</h3>
+          <v-row>
+            <v-col cols="4">
+              <v-card
+                class="pa-2"
+                outlined
+                tile
+              >
+              <h2>Sub total: {{ subtotal }}</h2>
+              </v-card>
+            </v-col>
+            <v-col cols="4">
+              <v-card
+                class="pa-2"
+                outlined
+                tile
+              >
+              <h2>I.V.A. 16% : {{ iva }}</h2>
+              </v-card>
+            </v-col>
+            <v-col cols="4">
+              <v-card
+                class="pa-2"
+                outlined
+                tile
+              >
+              <h2>Total: {{ this.total }}</h2>
+              </v-card>
+            </v-col>
+          </v-row>
           <!-- Inicia tabla-->
-          <v-card>
-            <v-data-table 
+          <br>
+          <v-divider></v-divider>
+          
+          <h3>Catálogo de productos</h3>
+         
+          <v-data-table 
             :headers="headers" 
             :items="partidas" 
-            item-key="name" 
+            item-key="id" 
             class="elevation-1">
                 <template v-slot:body="{ items, headers }">
                     <tbody>
@@ -254,11 +243,16 @@
                     </tbody>
                 </template>
             </v-data-table>
+          </v-card-text>
         </v-card>
-          <!-- Fin tabla-->
-        </v-card-text>
-      </v-card>
+      <v-card >
+          
+        <!-- Fin barra principal-->
     </v-card>
+          
+  </v-card-text>
+</v-card>
+
 
     
           
@@ -267,7 +261,7 @@
             {{ new Date().getFullYear() }} — <strong>Hecho por <a href="https://cerometros.com/" target="_blank">Ingeniería en Cómputo</a></strong>
           </div>
         </v-footer>
-      </v-container>
+
       <alert-message ref="refAlertMessage"></alert-message>
       <loader ref="refLoader"></loader>
     
@@ -275,70 +269,65 @@
 </template>
 
 <script>
-  import DefaultBar from "./AppBar.vue"
-  import DrawerHeader from "./DrawerHeader.vue"
+
   import AlertMessage from "./components/Utilities/Alerts/AlertMessage";
   import Loader from "./components/Utilities/Loaders/Loader";
- 
+  import medivaricJSON from '../data/medivaric.json'
   export default {
       name: "App",
       components: {
-        DefaultBar,
-        DrawerHeader,
           AlertMessage,
           Loader
       },
       data() {
           return {
-            firstName: '',
-
-      firstNameRules: [
-        value => {
-          if (value?.length > 3) return true
-
-          return 'El nombre debe tener al menos 3 caracteres.'
-        },
-      ],
-      lastName: '123',
-      lastNameRules: [
-        value => {
-          if (/[^0-9]/.test(value)) return true
-
-          return 'El apellido no debe contener números.'
-        },
-      ],
-      telefono: 0,
-      correo:"",
-              headers: [
-                    {
-                    text: "Medias y calcetines",
-                    align: "left",
-                    sortable: false,
-                    value: "name"
-                    },
-                    { text: "Imagen", 
-                    align: "left",
-                    sortable: false,
-                    value: "imagen" },
-                    { text: "Marca", value: "marca" },
-                    { text: "Familia de producto", value: "familiadeproducto" },
-                    { text: "Categoría", value: "categoria" },
-                    { text: "Referencia", value: "referencia" },
-                    { text: "Producto", value: "producto" },
-                    { text: "Color", value: "color" },
-                    { text: "Talla CHica (cajas)", value: "chica" },
-                    { text: "Talla MEDiana (cajas)", value: "mediana" },
-                    { text: "Talla GranDE (cajas)", value: "grande" },
-                    { text: "Talla Extra Grande (cajas)", value: "extragrande" },
-                    { text: "Precio antes de IVA (Pesos MX)", value: "precio" },
-                    { text: "Precio por partida (Pesos MX)", value: "precioxpartida" },
-
+                firstName: '',
+                firstNameRules: [
+                  value => {
+                    if (value?.length > 3) return true
+                    return 'El nombre debe tener al menos 3 caracteres.'
+                  },
                 ],
+                lastName: '',
+                lastNameRules: [
+                  value => {
+                    if (/[^0-9]/.test(value)) return true
+                    return 'El apellido no debe contener números.'
+                  },
+                ],
+                telefono: '',
+                correo:'',
                 subtotal: 0.0,
                 iva:0.0,
                 total: 0.0,
-                partidas: [],
-                
+                partidas: [] ,
+                headers: [
+                      {
+                      text: "Medias y calcetines",
+                      align: "left",
+                      sortable: false,
+                      value: "name"
+                      },
+                      { text: "Imagen", 
+                      align: "left",
+                      sortable: false,
+                      value: "imagen" },
+                      { text: "Marca", value: "marca" },
+                      { text: "Familia de producto", value: "familiadeproducto" },
+                      { text: "Categoría", value: "categoria" },
+                      { text: "Referencia", value: "referencia" },
+                      { text: "Producto", value: "producto" },
+                      { text: "Color", value: "color" },
+                      { text: "Talla CHica (cajas)", value: "chica" },
+                      { text: "Talla MEDiana (cajas)", value: "mediana" },
+                      { text: "Talla GranDE (cajas)", value: "grande" },
+                      { text: "Talla Extra Grande (cajas)", value: "extragrande" },
+                      { text: "Precio antes de IVA (Pesos MX)", value: "precio" },
+                      { text: "Precio venta Pub antes de IVA (Pesos MX)", value: "PVPSinIVA" },
+                      { text: "Su ganancia (%)", value: "Ganancia" },
+                      { text: "Precio por partida (Pesos MX)", value: "PPPSinIVA" },
+
+                  ],
           }
       },
       created(){
@@ -347,15 +336,63 @@
       
       methods: {
             save(item,key) {
-                this.$refs.refAlertMessage.showAlertFull("star", "success",
-                  "Guardado", '', 5000, '', 'bottom', "Se ha guardado su dato");
-                item.precioxpartida= (item.precio * item.chica) + (item.precio * item.mediana) + (item.precio * item.grande) + (item.precio * item.extragrande);
+              let er=false
+                let parcialCH=0.0
+                if(isNaN(item.chica)){
+                  // La entrada para chica no es un numero
+                  er=true
+                }else{
+                  parcialCH= (item.precio * item.chica)
+                }
+                let parcialMED=0.0
+                if(isNaN(item.mediana)){
+                  // Si la entrada para mediana no es numero
+                  er=true
+                }else{
+                  parcialMED= (item.precio * item.mediana)
+                }
+                let parcialGDE=0.0
+                if(isNaN(item.grande)){
+                  // Si la entrada para grande no es numero
+                  er=true
+                }else{
+                  parcialGDE= (item.precio * item.grande)
+                }
+                let parcialEG=0.0
+                if(isNaN(item.extragrande)){
+                  er=true
+                  // Si la entrada para extragrande no es numero
+                  //this.$refs.refAlertMessage.showAlertFull("star", "error",
+                  //"Error", '', 5000, '', 'bottom', "Debe escribir un numero entero de cajas EXTRA GRANDES");
+                  //return
+                }else{
+                  parcialEG=(item.precio * item.extragrande)
+                }
+                item.PPPSinIVA=  parcialCH+ parcialMED + parcialGDE + parcialEG;
                 this.subtotal=0.0
+                //console.log(this.partidas)
                 this.partidas.forEach((item, index) => {
-                    this.subtotal = this.subtotal + item.precioxpartida
+                  //console.log(item)
+                  this.subtotal = this.subtotal + item.PPPSinIVA
                 })
                 this.iva= this.subtotal * 0.16
-                this.total=this.subtotal + this.iva
+                this.total = this.subtotal + this.iva
+                //this.subtotal.toFixed(2)
+                //this.iva.toFixed(2)
+                //this.total.toFixed(2)
+                //alert("Subtotal: " + this.subtotal)
+                //alert("IVA: " + this.subtotal * 0.16)
+                //alert("Total: " + this.subtotal * 1.16)
+                if(er){
+                  this.$refs.refAlertMessage.showAlertFull("question", "error",
+                  "Hay un Error", '', 5000, '', 'top', "Debe escribir un numero entero de cajas. Hay un dato equivocado.");
+               
+                }else{
+                  this.$refs.refAlertMessage.showAlertFull("star", "success",
+                  "Guardando...", '', 5000, '', 'bottom', "Se actualizó su cotización.");
+                }
+                
+               
             },
             cancel(item,key) {},
             open(item,key) {
@@ -363,9 +400,9 @@
             },
             close(item,key) {},
           openAlert() {
-            this.inicializacion()
+            this.inicializacionACeros()
               this.$refs.refAlertMessage.showAlertFull("star", "success",
-                  "Empezando", '', 5000, '', 'bottom', "¡ Se ha iniciado la lista en Ceros!");
+                  "Empezando", '', 5000, '', 'top', "¡ Se ha iniciado la lista en Ceros!");
           },
           openLoader() {
               this.$refs.refLoader.activate();
@@ -391,104 +428,20 @@
             this.subtotal=0.0
             this.iva=0.0
             this.total=0.0
-        this.partidas= [
-                    {
-                        id: 1,
-                        imagen:"http://storage.googleapis.com/cerometros.appspot.com/users/5FLYLB6WZ6PFafYfd/avatar69.jpeg",
-                        marca: "Medivaric",
-                        familiadeproducto: "Media",
-                        categoria: "Baja compresion 8-15 mmHg",
-                        referencia: "MV-1111p",
-                        producto:"Pantimedia dama transparente",
-                        color: "Beige",
-                        chica:0,
-                        mediana:0,
-                        grande:0,
-                        extragrande:0,
-                        precio:240,
-                        precioxpartida:0
-                    },
-                    {
-                        id: 2,
-                        imagen:"http://storage.googleapis.com/cerometros.appspot.com/users/DsYfSb6Q8sfH49hmB/avatar88.png",
-                        marca: "Medivaric",
-                        familiadeproducto: "Media",
-                        categoria: "Baja compresion 8-15 mmHg",
-                        referencia: "MV-1111p",
-                        producto:"Pantimedia dama transparente",
-                        color: "Negro",
-                        chica:0,
-                        mediana:0,
-                        grande:0,
-                        extragrande:0,
-                        precio:240,
-                        precioxpartida:0
-                    },
-                    {
-                        id: 3,
-                        imagen:"https://erp.cerometros.com/document.php?hashp=yjDZnh2j7LF5eBLl84qm0D4u5Ua1M8RL",
-                        marca: "Medivaric",
-                        familiadeproducto: "Media",
-                        categoria: "Baja compresion 8-15 mmHg",
-                        referencia: "MV-1111p",
-                        producto:"Pantimedia dama transparente",
-                        color: "Sahara",
-                        chica:0,
-                        mediana:0,
-                        grande:0,
-                        extragrande:0,
-                        precio:240,
-                        precioxpartida:0
-                    },
-                    {
-                        id: 4,
-                        imagen:"https://erp.cerometros.com/document.php?hashp=5Cl6ljk2a7e14Jg5U0Or39ACRcDoiXXW",
-                        marca: "Medivaric",
-                        familiadeproducto: "Media",
-                        categoria: "Baja compresion 8-15 mmHg",
-                        referencia: "MV-1113p",
-                        producto:"Tobimedia dama transparente",
-                        color: "Beige",
-                        chica:0,
-                        mediana:0,
-                        grande:0,
-                        extragrande:0,
-                        precio:150,
-                        precioxpartida:0
-                    },
-                    {
-                        id: 5,
-                        imagen:"https://erp.cerometros.com/document.php?hashp=5Cl6ljk2a7e14Jg5U0Or39ACRcDoiXXW",
-                        marca: "Medivaric",
-                        familiadeproducto: "Media",
-                        categoria: "Baja compresion 8-15 mmHg",
-                        referencia: "MV-1113p",
-                        producto:"Tobimedia dama transparente",
-                        color: "Negro",
-                        chica:0,
-                        mediana:0,
-                        grande:0,
-                        extragrande:0,
-                        precio:150,
-                        precioxpartida:0
-                    },
-                    {
-                        id: 6,
-                        imagen:"https://erp.cerometros.com/document.php?hashp=5Cl6ljk2a7e14Jg5U0Or39ACRcDoiXXW",
-                        marca: "Medivaric",
-                        familiadeproducto: "Media",
-                        categoria: "Baja compresion 8-15 mmHg",
-                        referencia: "MV-1113p",
-                        producto:"Tobimedia dama transparente",
-                        color: "Sahara",
-                        chica:0,
-                        mediana:0,
-                        grande:0,
-                        extragrande:0,
-                        precio:150,
-                        precioxpartida:0
-                    }
-                    ]
+            this.partidas= medivaricJSON
+          },
+          inicializacionACeros(){
+            this.subtotal=0.0
+            this.iva=0.0
+            this.total=0.0
+            this.partidas.forEach((item, index) => {
+                  //console.log(item)
+                  item.chica=0
+                  item.mediana=0
+                  item.grande=0
+                  item.extragrande=0
+                  item.PPPSinIVA=0
+                })
       },
       }
   }
