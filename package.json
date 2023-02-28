@@ -13,6 +13,7 @@
     "meteor-node-stubs": "^1.0.0",
     "vue": "^2.6.11",
     "vue-meteor-tracker": "^2.0.0-beta.5",
+    "vue-zoomer": "^0.3.10",
     "vuetify": "^2.2.27"
   },
   "meteor": {

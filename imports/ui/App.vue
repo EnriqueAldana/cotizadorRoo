@@ -26,7 +26,7 @@
     <!-- Inicio barra de aplicacion-->
 <v-card
   class="mx-auto"
-  max-width="1600"
+  max-width="1700"
   style="margin-top: -64px;"
 >
         <v-toolbar flat>
@@ -44,33 +44,36 @@
             <v-icon>mdi-restart</v-icon>
           </v-btn>
   
-          <v-btn icon>
+          <v-btn icon @click="openModalSend">
             <v-icon>mdi-send</v-icon>
           </v-btn>
         </v-toolbar>
   
         <v-divider></v-divider>
         
-        <v-card-text style="height: 1400px;">
+        <v-card-text style="height: 1700px;">
             <v-card
             class="mx-auto"
-            width="1400"
+            width="1700"
             prepend-icon="mdi-home"
             >
             <v-card-text>
               <h3>Datos del cliente</h3>
               <!-- Inicio campos datos cliente-->
-          <v-sheet width="1400" class="mx-auto">
-            <v-form fast-fail @submit.prevent>
+          <v-sheet width="1700" class="mx-auto">
+            <v-form ref="form" >
               <v-row>
                 <v-col
                   cols="12"
                   md="6"
                 >
               <v-text-field
-                v-model="firstName"
+                v-model="cotizacion.firstName"
+                clearable
+                required
+                hide-details="auto"
                 label="Nombre"
-                :rules="firstNameRules"
+                :rules="[rules.required,rules.firstNameRule]"
               ></v-text-field>
             </v-col>
             <v-col
@@ -78,9 +81,12 @@
             md="6"
             >
               <v-text-field
-                v-model="lastName"
+                v-model="cotizacion.lastName"
+                clearable
+                required
+                hide-details="auto"
                 label="Apellido"
-                :rules="lastNameRules"
+                :rules="[rules.required,rules.lastNameRule]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -90,9 +96,12 @@
               md="6"
             >
               <v-text-field
-                v-model="telefono"
+                v-model="cotizacion.telefono"
+                clearable
+                required
+                hide-details="auto"
                 label="Teléfono"
-                :rules="lastNameRules"
+                :rules="[rules.required,rules.telefonoNumberRule]"
               ></v-text-field>
             </v-col>
             <v-col
@@ -100,9 +109,12 @@
               md="6"
             >
               <v-text-field
-                v-model="correo"
+                v-model="cotizacion.correo"
+                clearable
+                required
+                hide-details="auto"
                 label="Correo"
-                :rules="lastNameRules"
+                :rules="[rules.required,rules.email]"
               ></v-text-field>
             </v-col>
           </v-row>
@@ -111,48 +123,77 @@
           <!-- Fin campos datos clientes-->
           <h3>Montos de la cotización</h3>
           <v-row>
-            <v-col cols="4">
+            <v-col cols="12"
+                    md="3"
+            >
               <v-card
                 class="pa-2"
                 outlined
                 tile
               >
-              <h2>Sub total: {{ subtotal }}</h2>
+              <h2>Sub total: {{ cotizacion.subtotal }}</h2>
               </v-card>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="12"
+                    md="3">
               <v-card
                 class="pa-2"
                 outlined
                 tile
               >
-              <h2>I.V.A. 16% : {{ iva }}</h2>
+              <h2>I.V.A. 16% : {{ cotizacion.iva }}</h2>
               </v-card>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="12"
+                    md="3">
               <v-card
                 class="pa-2"
                 outlined
                 tile
               >
-              <h2>Total: {{ this.total }}</h2>
+              <h2>Total: {{ cotizacion.total }}</h2>
               </v-card>
             </v-col>
+            <v-col cols="12"
+                    md="3">
+              <v-card
+                class="pa-2"
+                outlined
+                tile
+              >
+              <template>
+                <div>
+                      <div class="d-flex justify-space-around align-center flex-column flex-md-row">
+                        <v-btn v-if="isHiddenSendBtn"
+                          color="primary"
+                          size="x-large"
+                          @click="openModalSend">Enviar solicitud
+                        </v-btn>              
+                    </div>
+                  </div>
+                </template>
+              </v-card>
+            </v-col>
+           
           </v-row>
           <!-- Inicia tabla-->
           <br>
           <v-divider></v-divider>
           
           <h3>Catálogo de productos</h3>
-         
+          
           <v-data-table 
             :headers="headers" 
-            :items="partidas" 
+            :items="cotizacion.partidas" 
+            :items-per-page="5"
             item-key="id" 
-            class="elevation-1">
+            class="elevation-1"
+        
+          >
+             
                 <template v-slot:body="{ items, headers }">
                     <tbody>
-                        <tr v-for="(item,idx,k) in items" :key="idx">
+                        <tr v-for="(item,idx,k) in items" :key="idx" :class="item.rowColor">
                             <td v-for="(header,key) in headers" :key="key">
                                 <div v-if="key ===8">
                                     <v-edit-dialog 
@@ -162,7 +203,7 @@
                                     @open="open(item,key)"
                                     @close="close(item,key)"
                                     large
-                                  > {{item[header.value]}}
+                                  > <h3>{{item[header.value]}}</h3>
                                     <template v-slot:input>
                                       <v-text-field
                                         v-model="item[header.value]"
@@ -180,7 +221,7 @@
                                     @open="open(item,key)"
                                     @close="close(item,key)"
                                     large
-                                  > {{item[header.value]}}
+                                  > <h3>{{item[header.value]}}</h3>
                                     <template v-slot:input>
                                       <v-text-field
                                         v-model="item[header.value]"
@@ -198,7 +239,7 @@
                                     @open="open(item,key)"
                                     @close="close(item,key)"
                                     large
-                                  > {{item[header.value]}}
+                                  > <h3>{{item[header.value]}}</h3>
                                     <template v-slot:input>
                                       <v-text-field
                                         v-model="item[header.value]"
@@ -216,7 +257,7 @@
                                     @open="open(item,key)"
                                     @close="close(item,key)"
                                     large
-                                  > {{item[header.value]}}
+                                  > <h3>{{item[header.value]}}</h3>
                                     <template v-slot:input>
                                       <v-text-field
                                         v-model="item[header.value]"
@@ -229,13 +270,29 @@
                                 <div v-else>
                                     <div v-if="key ===1">
                                         <div class="d-flex align-center pt-5 pb-5">
-                                            <v-avatar>
-                                              <img :src="item[header.value] || '/img/user.png'" alt="Avatar">
-                                            </v-avatar>
+                                            
+                                              <v-zoomer style="width: 177px; height: 335px; ">
+                                                <img
+                                                  :src="item[header.value] || '/img/user.png'"
+                                                  style="object-fit: contain; width: 100%; height: 100%;"
+                                                >
+                                              </v-zoomer>
+                                             <!--
+                                                  <v-avatar>
+                                                  <img :src="item[header.value] || '/img/user.png'" alt="Avatar">
+                                                  </v-avatar>
+                                                --> 
+                                            
                                           </div>
                                     </div>
                                     <div v-else>
-                                    {{item[header.value]}}  
+                                      <h3>
+                                        {{item[header.value]}}
+                                      </h3>
+                                          
+                                        
+                                     
+                                      
                                     </div> 
                                 </div>  
                             </td>
@@ -264,6 +321,8 @@
 
       <alert-message ref="refAlertMessage"></alert-message>
       <loader ref="refLoader"></loader>
+      <modal-remove ref="refModalRemove" v-bind:modalData="cotizacionTemp"
+      @id_element="enviarCotizacion"></modal-remove>
     
   </v-app>
 </template>
@@ -273,34 +332,62 @@
   import AlertMessage from "./components/Utilities/Alerts/AlertMessage";
   import Loader from "./components/Utilities/Loaders/Loader";
   import medivaricJSON from '../data/medivaric.json'
+  import VueZoomer from 'vue-zoomer'
+  import ModalRemove from "./components/Utilities/Modals/ModalRemove";
+
   export default {
       name: "App",
       components: {
           AlertMessage,
-          Loader
+          Loader,
+          VZoomer: VueZoomer.Zoomer,
+          ModalRemove
       },
       data() {
           return {
-                firstName: '',
-                firstNameRules: [
-                  value => {
-                    if (value?.length > 3) return true
+            isHiddenSendBtn: false,
+            rules: {
+                required: value => !!value || 'Requerido.',
+                counter: value => value.length <= 20 || 'Max 20 caracteres',
+                counter8: value => value.length <= 8 || 'Max 8 caracteres',
+                email: value => {
+                  const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                  return pattern.test(value) || 'Correo Electrónico incorrecto.'
+                },
+                firstNameRule: value => {
+                    if (value?.length > 2) return true
                     return 'El nombre debe tener al menos 3 caracteres.'
                   },
-                ],
-                lastName: '',
-                lastNameRules: [
-                  value => {
-                    if (/[^0-9]/.test(value)) return true
-                    return 'El apellido no debe contener números.'
+                lastNameRule: value => {
+                    if (value?.length > 2) return true
+                    return 'El apellido debe tener al menos 3 caracteres.'
                   },
-                ],
-                telefono: '',
-                correo:'',
-                subtotal: 0.0,
-                iva:0.0,
-                total: 0.0,
-                partidas: [] ,
+                telefonoNumberRule: value => {
+                    if (/[0-9]{10}/.test(value)) return true
+                    return 'El teléfono debe tener solo 10 números.'
+                  },
+                telefonoNumber10Rule: value => {
+                  if (/[0-9]{10}/.test(value)) return true
+                    return 'El numero telefónico debe tener 10 caracteres.'
+                },
+            },
+            cotizacionTemp: {
+                    preposition: 'la',
+                    typeElement: 'cotización',
+                    mainNameElement: '',
+                    _id: null,
+                    element: {}
+                },
+            cotizacion:{
+                  firstName: '',
+                  lastName: '',
+                  telefono: '',
+                  correo:'',
+                  subtotal: 0.0,
+                  iva:0.0,
+                  total: 0.0,
+                  partidas: [] ,
+                },
                 headers: [
                       {
                       text: "Medias y calcetines",
@@ -335,6 +422,26 @@
       },
       
       methods: {
+            async enviarCotizacion(){
+              // NO FUNCIONO await this.validate ()
+              //console.info(valido)
+              //alert(valido)
+              let valid = false
+              if (this.cotizacion.firstName.length > 3 && this.cotizacion.lastName.length>3 && this.cotizacion.telefono.length >9 && this.cotizacion.correo.length > 5 && this.cotizacion.total > 0)
+                  valid=true
+              if(valid){
+                // Mandar generar cotizacion
+                this.$refs.refAlertMessage.showAlertFull("star", "success",
+                  "Enviando...", '', 10000, '', 'top', "Se envió su cotización y recibirá un correo de confirmación.");
+                this.inicializacionACeros()
+                }else{
+                this.$refs.refAlertMessage.showAlertFull("question", "error",
+                  "Hay un Error", '', 5000, '', 'top', "Revise los datos del cliente y agregue al menos una partida.");
+             
+              }
+              
+              
+            },
             save(item,key) {
               let er=false
                 let parcialCH=0.0
@@ -369,14 +476,21 @@
                   parcialEG=(item.precio * item.extragrande)
                 }
                 item.PPPSinIVA=  parcialCH+ parcialMED + parcialGDE + parcialEG;
-                this.subtotal=0.0
+                this.cotizacion.subtotal=0.0
                 //console.log(this.partidas)
-                this.partidas.forEach((item, index) => {
+                this.cotizacion.partidas.forEach((item, index) => {
                   //console.log(item)
-                  this.subtotal = this.subtotal + item.PPPSinIVA
+                  this.cotizacion.subtotal = this.cotizacion.subtotal + item.PPPSinIVA
                 })
-                this.iva= this.subtotal * 0.16
-                this.total = this.subtotal + this.iva
+                this.cotizacion.iva= this.cotizacion.subtotal * 0.16
+                this.cotizacion.total = this.cotizacion.subtotal + this.cotizacion.iva
+                // Mostrar boton
+                if(this.cotizacion.total > 0){
+                  this.isHiddenSendBtn=true
+                }else{
+                  this.isHiddenSendBtn=false
+                }
+                      
                 //this.subtotal.toFixed(2)
                 //this.iva.toFixed(2)
                 //this.total.toFixed(2)
@@ -410,31 +524,51 @@
                   this.$refs.refLoaderTest.deactivate();
               }, 3000);
           },
-          openModalRemove() {
-              const product = {
-                  _id: "asdf1234",
-                  name: "iPhone 5",
-                  serialNumber: "XXX123123",
-                  price: 10000,
-                  brand: "Apple"
-              };
-              
+          async validate () {
+              const { valid } = await this.$refs.form.validate()
+              if(valid){
+                // Mandar generar cotizacion
+                this.$refs.refAlertMessage.showAlertFull("star", "success",
+                  "Enviando...", '', 5000, '', 'bottom', "Se envió su cotización y recibirá un correo de confirmación.");
+              }else{
+                this.$refs.refAlertMessage.showAlertFull("question", "error",
+                  "Hay un Error", '', 5000, '', 'top', "Revise los datos del cliente.");
+             
+              }
+                
+          },
+          reset () {
+            this.$refs.form.reset()
+          },
+          resetValidation () {
+            this.$refs.form.resetValidation()
+          },
+          openModalSend() {
+             // Validar que tengamos datos completos de la cotizacion
+             
+             
+              this.cotizacionTemp.element = this.cotizacion;
+              this.cotizacionTemp._id = this.cotizacion.total;
+              this.cotizacionTemp.mainNameElement = this.cotizacion.correo;
               this.$refs.refModalRemove.dialog = true;
+            
+              
           },
           deleteUser(idUser) {
               console.log("Id del usuario a eliminar: ", idUser);
           },
+          
           inicializacion(){
-            this.subtotal=0.0
-            this.iva=0.0
-            this.total=0.0
-            this.partidas= medivaricJSON
+            this.cotizacion.subtotal=0.0
+            this.cotizacion.iva=0.0
+            this.cotizacion.total=0.0
+            this.cotizacion.partidas= medivaricJSON
           },
           inicializacionACeros(){
-            this.subtotal=0.0
-            this.iva=0.0
-            this.total=0.0
-            this.partidas.forEach((item, index) => {
+            this.cotizacion.subtotal=0.0
+            this.cotizacion.iva=0.0
+            this.cotizacion.total=0.0
+            this.cotizacion.partidas.forEach((item, index) => {
                   //console.log(item)
                   item.chica=0
                   item.mediana=0
@@ -442,11 +576,48 @@
                   item.extragrande=0
                   item.PPPSinIVA=0
                 })
+                // Mostrar boton
+                if(this.cotizacion.total > 0){
+                  this.isHiddenSendBtn=true
+                }else{
+                  this.isHiddenSendBtn=false
+                }
+                // reset a la forma
+                this.reset()
+                
       },
-      }
+      itemRowBackground: function (item) {
+      return item.id > 3 ? 'style-1' : 'style-2'
+      },
+      row_classes(item) {
+        if (item.id < 200) {
+          return "orange";
+        } 
+    }
+    }
   }
 </script>
 
 <style scoped>
-
+.style-1 {
+  background-color: rgb(215,215,44)
+}
+.style-2 {
+  background-color: rgb(114,114,67)
+}
+.orange {
+  background-color: orange;
+}
+.red {
+  background-color: red;
+}
+.black {
+  background-color: black;
+}
+.gray {
+  background-color: gray;
+}
+.yellow {
+  background-color: yellow;
+}
 </style>

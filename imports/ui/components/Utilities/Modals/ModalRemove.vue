@@ -3,13 +3,13 @@
         <v-card>
             <v-card-title class="headline">
                 <div class="title">
-                    Eliminar {{modalData.typeElement}}
+                    Envíar {{modalData.typeElement}}
                 </div>
             </v-card-title>
             <v-card-text>
-                ¿Estas seguro de eliminar {{modalData.preposition}}
+                ¿Estas seguro de envíar {{modalData.preposition}}
                 {{modalData.typeElement}}
-                {{modalData.mainNameElement}}?
+                al correo : {{modalData.mainNameElement}}?
             </v-card-text>
             <v-card-actions>
                 <v-spacer></v-spacer>
@@ -17,7 +17,7 @@
                     Cancelar
                 </v-btn>
                 <v-btn color="error" depressed @click="removeElement">
-                    Eliminar
+                    Envíar
                 </v-btn>
             </v-card-actions>
         </v-card>
