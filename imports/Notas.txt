@@ -1,36 +1,31 @@
 Arrancar aplicacion
-meteor run --port 8080
+1.- Fijar la variable de entorno en el shell
+export MAIL_URL: "smtp://cerometros2022@gmail.com:Enrique1937$_@smtp.gmail.com:465"
+export EMAIL_SERVICES="cerometros2022@gmail.com"
+export MAIL_URL="smtp://cerometros2022@gmail.com:Enrique1937$_@smtp.gmail.com:465"
+export MONGO_URL= "mongodb://tagTemporal:tagTemporal@localhost:27017/tagTemporal?authSource=tagTemporal"
+2.- Ejecutar en el shell de manera de cargar el archivo de configuracion :
+meteor --settings ./settings/settings.json
+O bien
+yarn run:mac
 
+meteor run --port 8080
+meteor run --settings settings/settings.json --port 8080 
+
+
+Acciones para regenerar el ambiente de desarrollo
+1.- Detener el servidor de Meteor.
+2.- Ejecutr el comando Meteor reset
+3.- eliminar carpeta node_modules
+4.- eliminar carpeta .cache
+5.- volver a ejecutar comando yarn install si se usa yarn o npm install si se usa npm
+6.- Arrancar Meteor .
 
 Data table edicion en celda
 
 DATA TABLE editable con dos FOR .
 https://www.codeply.com/p/CMcTQVlHvp/vuetify-editable-datatable
 
-Ajustar
-<tr v-for="(item,idx,k) in items" :key="idx">
-                            <td v-for="(header,key) in headers" :key="key">
-                                <v-edit-dialog
-                                  :return-value.sync="item[header.value]"
-                                  @save="save(item,key)"
-                                  @cancel="cancel(item,key)"
-                                  @open="open(item,key)"
-                                  @close="close"
-                                  large
-Y    
- methods: {
-    save(item,key) {
-        // Si es numero guardar y calculamos
-        // De lo contrario guardamos el del editado y mandamos mensaje
-    },
-    cancel(item,key) {
-        guardamos el del editado y mandamos mensaje
-    },
-    open(item,key) {
-        // Asignar a un objeto edit
-        alert(item.id)
-        alert(key)
-    },
 
 Con esto calculamos la logica de calculo
 
@@ -48,3 +43,57 @@ https://codepen.io/Jayesh_v/pen/wvgjMva
 RENDER DEL FOR
 
 https://vuejs.org/guide/essentials/list.html
+
+
+OBJETO PRUEBAS
+{
+  "cotizacion" : {
+                "_id": "1",
+                "firstName": "Enrique",
+                "lastName": "Aldana",
+                "telefono": "1234567890",
+                "correo": "jealdana@gmail.com",
+                "subtotal":10,
+                "iva":6,
+                "total": 16,
+                "partidas": [
+                  {
+        "id": 10,
+        "imagen":"http://storage.googleapis.com/cerometros.appspot.com/users/5FLYLB6WZ6PFafYfd/avatar69.jpeg",  
+      
+      "marca": "MEDIVARIC",
+      "familiadeproducto": "Medias",
+      "categoria": "Baja compresión 8-15 mmHg",
+      "rowColor": "blue",
+      "referencia": "MV-5613p",
+      "producto": "Calcetín Unisex para Pie Sensible ‐ Miracle Socks con Fibra de Cobre",
+      "color": "Azul",
+      "chica": 0,
+      "mediana": 0,
+      "grande": 0,
+      "extragrande": 0,
+      "precio": 290,
+      "PVPSinIVA": 461.21,
+      "Ganancia": 59.04,
+      "PPPSinIVA": 0.0,
+      "precioxpartida":0.0
+    }
+                  
+                  ] 
+  }
+}
+
+// usuario
+{
+  "user": {
+                "_id": null,
+                "username": "Enrique Aldana",
+             
+                "emails": [{"address": "jealdana@cerometros.com", "verified": false}],
+                "profile": {
+                    "profile": "ClienteROO",
+                    "name": "Enrique",
+                    "lastName": "Aldana"
+                }
+                }
+}

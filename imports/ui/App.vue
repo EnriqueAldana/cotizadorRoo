@@ -431,6 +431,8 @@
                   valid=true
               if(valid){
                 // Mandar generar cotizacion
+
+                
                 this.$refs.refAlertMessage.showAlertFull("star", "success",
                   "Enviando...", '', 10000, '', 'top', "Se envió su cotización y recibirá un correo de confirmación.");
                 this.inicializacionACeros()
