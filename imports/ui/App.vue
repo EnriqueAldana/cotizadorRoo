@@ -36,10 +36,10 @@
   
           <v-spacer></v-spacer>
   
-          <v-btn icon>
+          <v-btn icon @click="openAyuda">
             <v-icon>mdi-help</v-icon>
           </v-btn>
-  
+          
           <v-btn icon @click="openAlert">
             <v-icon>mdi-restart</v-icon>
           </v-btn>
@@ -121,7 +121,14 @@
          </v-form>
           </v-sheet>
           <!-- Fin campos datos clientes-->
-          <h3>Montos de la cotización</h3>
+          <v-divider></v-divider>
+          <v-card
+          class="mx-auto"
+          width="1700"
+          prepend-icon="mdi-home"
+          >
+              <v-card-text>
+                <h3>Montos de la cotización</h3>
           <v-row>
             <v-col cols="12"
                     md="3"
@@ -176,16 +183,44 @@
             </v-col>
            
           </v-row>
+              </v-card-text>
+          
+          </v-card>
+          
           <!-- Inicia tabla-->
           <br>
           <v-divider></v-divider>
+          <v-row>
+                <v-col
+                  cols="12"
+                  md="6"
+                >
+                <h3>Catálogo de productos</h3>
+              </v-col>
+              <v-col
+                  cols="12"
+                  md="6"
+                >
+                <v-text-field
+                v-model="search"
+                clearable
+                append-icon="mdi-magnify"
+                label="Escriba aquí para buscar..."
+                single-line
+                hide-details
+              ></v-text-field>
+              </v-col>
+          </v-row>
           
-          <h3>Catálogo de productos</h3>
           
-          <v-data-table 
+     
+          <v-data-table
             :headers="headers" 
             :items="cotizacion.partidas" 
-            :items-per-page="5"
+            :items-per-page="100"
+            :search="search"
+            
+            multi-sort
             item-key="id" 
             class="elevation-1"
         
@@ -312,13 +347,15 @@
 
 
     
-          
+    <!--
+
+       
         <v-footer class="d-flex flex-column">
           <div class="px-4 py-2 bg-black text-center w-100">
             {{ new Date().getFullYear() }} — <strong>Hecho por <a href="https://cerometros.com/" target="_blank">Ingeniería en Cómputo</a></strong>
           </div>
         </v-footer>
-
+       -->  
       <alert-message ref="refAlertMessage"></alert-message>
       <loader ref="refLoader"></loader>
       <modal-remove ref="refModalRemove" v-bind:modalData="cotizacionTemp"
@@ -388,10 +425,12 @@
                   total: 0.0,
                   partidas: [] ,
                 },
+                ayudaURL:'',
+                search: '',
                 headers: [
                       {
                       text: "Medias y calcetines",
-                      align: "left",
+                      align: "start",
                       sortable: false,
                       value: "name"
                       },
@@ -515,6 +554,12 @@
                 
             },
             close(item,key) {},
+            openAyuda(){
+              //window.open(process.env.AYUDA_URL, '_blank');
+              //window.open( 'https://www.youtube.com/watch?v=9i1TtTkAIjs', '_blank');
+              window.open( this.ayudaURL, '_blank');
+              
+            },
           openAlert() {
             this.inicializacionACeros()
               this.$refs.refAlertMessage.showAlertFull("star", "success",
@@ -565,6 +610,9 @@
             this.cotizacion.iva=0.0
             this.cotizacion.total=0.0
             this.cotizacion.partidas= medivaricJSON
+          if(Meteor.settings.private?.AYUDA_URL)
+              this.ayudaURL=Meteor.settings.private.AYUDA_URL;
+          
           },
           inicializacionACeros(){
             this.cotizacion.subtotal=0.0

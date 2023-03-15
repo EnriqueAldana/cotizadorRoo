@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
-    "run:mac": "MONGO_URL=mongodb://tagTemporal:tagTemporal@localhost:27017/tagTemporal?authSource=tagTemporal meteor",
+    "run:mac": "MONGO_URL=mongodb://tagTemporal:tagTemporal@localhost:27017/tagTemporal?authSource=tagTemporal meteor --settings ./settings/settings.json --port 3000",
     "run": "meteor --settings ./settings/settings.json --port 3000",
     "test": "meteor test --once --driver-package meteortesting:mocha",
     "test-app": "TEST_WATCH=1 meteor test --full-app --driver-package meteortesting:mocha",
@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.8.3",
+    "bcrypt": "^5.1.0",
     "jquery": "^3.4.1",
     "meteor-node-stubs": "^1.0.0",
+    "nodemailer": "^6.9.1",
     "vue": "^2.6.11",
     "vue-meteor-tracker": "^2.0.0-beta.5",
     "vue-zoomer": "^0.3.10",

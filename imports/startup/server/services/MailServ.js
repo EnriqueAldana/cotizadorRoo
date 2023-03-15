@@ -7,6 +7,8 @@ if(Meteor.isDevelopment){
         process.env.LOGO_IMAGE_PATH = Meteor.settings.private.LOGO_IMAGE_PATH;
         process.env.MAIL_URL = Meteor.settings.private.MAIL_URL;
     }
+    if(Meteor.settings.private?.AYUDA_URL)
+        process.env.AYUDA_URL=Meteor.settings.private.AYUDA_URL;
 }
 
 // Para ambiente productivo las variables de entorno deberan ser setteadas
@@ -92,7 +94,7 @@ try{
     console.info(" Email sender",process.env.EMAIL_SERVICES+ '\n');
     console.info(' Email LOGO IMAGE URL:'+ process.env.LOGO_IMAGE_PATH+ '\n');
     console.info(' Email  APP IMAGE PATH:'+ process.env.PRODUCT_IMAGE_PATH+ '\n');
-    
+    console.info('Ayuda URL: ' +  process.env.AYUDA_URL + '\n');
 }catch(e){
     console.error("Error inicio de la aplicaion",e)
    
