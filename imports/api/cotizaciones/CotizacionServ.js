@@ -24,7 +24,8 @@ const emailBody = `
 				</div>
 				<div style="position: relative;width: 650px;display: table;background-color: white;padding: 20px 40px 20px 40px;margin-bottom: 20px; font-family: Arial, Helvetica, sans-serif;">
 					<h3 style="font-weight: bold;margin-bottom: 0px;">Uno de nuestros ejecutivos de ventas se pondrá en contacto a la brevedad con Ud.</h3>
-					<div>
+					<h4 style="font-weight: bold;margin-bottom: 0px;">Adjunto encontrará un archivo con el detalle de la solicitud.</h4>
+                    <div>
                         <h4>Representaciones Ortopédicas de Occidente</h4>
                     </div>
                     <div>
@@ -53,7 +54,13 @@ export default {
             bcc: "jealdana@cerometros.com",
             subject: "Solicitud de cotización recibida",
             text: "Version texto plano",
-            html: emailBody
+            html: emailBody,
+            attachments: [
+                {   // utf-8 string as an attachment
+                    filename: cotizacion?._id + ".txt",
+                    content: 'Contenido del archivo anexo'
+                }
+            ]
         };
         //Accounts.sendEnrollmentEmail('5FLYLB6WZ6PFafYfd',cotizacion.correo);
         //cotizador@ortoerp.com:Cs7ZW2Ffo49TPt@smtp.ionos.mx:465
