@@ -1,7 +1,7 @@
 
 import {Meteor} from "meteor/meteor";
 import nodemailer from "nodemailer"
-
+var convert = require('json-to-plain-text');
 // https://microlab.ec/blog/enviar-correo-gmail-desde-nodejs/
 // https://nodemailer.com/about/
 const emailBody = `
@@ -58,7 +58,8 @@ export default {
             attachments: [
                 {   // utf-8 string as an attachment
                     filename: cotizacion?._id + ".txt",
-                    content: 'Contenido del archivo anexo'
+                    content: 'Detalle de la solicitud de cotización' + "\n" + convert.toPlainText(cotizacion)
+                    //JSON.stringify(cotizacion)
                 }
             ]
         };
