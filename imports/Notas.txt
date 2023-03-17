@@ -108,3 +108,7 @@ Meteor y VUE 3
 https://github.com/fredmaiaarantes/vue3_tailwind3/tree/master/client
 
 https://github.com/Hernanm0g/meteor_vuetify/blob/master/package.json
+
+
+Imagen de Logo
+https://firebasestorage.googleapis.com/v0/b/ortoerp.appspot.com/o/ROO_LOGOGrande.jpg?alt=media&token=9d467a04-0099-4499-a426-4ec186111631

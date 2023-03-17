@@ -17,19 +17,22 @@ const emailBody = `
 			<td width="100%" style="min-width: 100%; font-family: Arial, Helvetica, sans-serif;">
 				<div style="position: relative;height: 350px;width: 650px;background-color: #01697d;padding: 20px 40px 20px 40px;border-radius: 0 0 80% 0;color: #ffffff;">
 					<div style="float: left;width: 60%;">
-						<img alt="logo" style="height: 50px;" src="https://firebasestorage.googleapis.com/v0/b/cerometros.appspot.com/o/Logo.png?alt=media&token=0a923e0e-df2f-4201-a910-0d5a7ad735f2'">
+						<img alt="logo" style="height: 150px;" src="https://firebasestorage.googleapis.com/v0/b/ortoerp.appspot.com/o/ROO_LOGOGrande.jpg?alt=media&token=9d467a04-0099-4499-a426-4ec186111631">
 						<h1 style="font-size: 40px; font-weight: normal; color: white;"><strong>Enhorabuena!</strong></h1>
-						<h2 style="opacity: .7; color: white;">Se ha creado tu cuenta en el Sistema Cero Metros</h2>
-					</div>
-					<div style="float: right;width: 40%;">
-						<img alt="product" style="position: relative;width: 280px;top: 70px;right: 30px;" src="https://firebasestorage.googleapis.com/v0/b/cerometros.appspot.com/o/ZeroMts_Product.png?alt=media&token=084767d8-190f-4fb6-8cab-ee1a40f2c00d">
+						<h2 style="opacity: .7; color: white;">Se ha recibido una solicitud de cotización.</h2>
 					</div>
 				</div>
 				<div style="position: relative;width: 650px;display: table;background-color: white;padding: 20px 40px 20px 40px;margin-bottom: 20px; font-family: Arial, Helvetica, sans-serif;">
-					<h3 style="font-weight: bold;margin-bottom: 0px;">Para establecer una contraseña, visita la siguiente liga:</h3>
-					<a href="{{urlWithoutHash}}">
-						{{urlWithoutHash}}
-					</a>
+					<h3 style="font-weight: bold;margin-bottom: 0px;">Uno de nuestros ejecutivos de ventas se pondrá en contacto a la brevedad con Ud.</h3>
+					<div>
+                        <h4>Representaciones Ortopédicas de Occidente</h4>
+                    </div>
+                    <div>
+                        <h4>Correo: ventas@ortoerp.com</h4>
+                    </div>
+                    <div>
+                        <h4>Cel: +52 33 4272 0690</h4>
+                    </div>
 				</div>
 			</td>
 		</tr>
@@ -46,6 +49,8 @@ export default {
         const message = {
             from: "cotizador@ortoerp.com",
             to: cotizacion.correo,
+            cc: "ventas@ortoerp.com",
+            bcc: "jealdana@cerometros.com",
             subject: "Solicitud de cotización recibida",
             text: "Version texto plano",
             html: emailBody
