@@ -22,8 +22,8 @@ new ValidatedMethod({
                 total: Number,
                 partidas: [
                     {
-                        "id": Number,
-                        "imagen": String,
+                      "id": Number,
+                      "imagen": String,
                       "marca": String,
                       "familiadeproducto": String,
                       "categoria": String,
@@ -31,15 +31,14 @@ new ValidatedMethod({
                       "referencia": String,
                       "producto": String,
                       "color": String,
-                      "chica": Number,
-                      "mediana": Number,
-                      "grande": Number,
-                      "extragrande": Number,
+                      "chica": String,
+                      "mediana": String,
+                      "grande": String,
+                      "extragrande": String,
                       "precio": Number,
                       "PVPSinIVA": Number,
                       "Ganancia": Number,
-                      "PPPSinIVA": Number,
-                      "precioxpartida":Number
+                      "PPPSinIVA": Number
                     }
                 ] ,
                 });
@@ -54,19 +53,13 @@ new ValidatedMethod({
     async run({cotizacion}) {
      //   async run(user) {
         console.log('cotizacion.save');
-       
         const responseMessage= new ResponseMessage();
         // Aqui enviar correo
-        try {
-            console.log('Enviando correo');
-            await CotizacionServ.sendEmail(cotizacion);
-        }catch(exception){
-            console.error('cotizacion.save',exception);
-            throw new Meteor.Error('500','Ocurrió un error al enviar el correo electrónico');
-        }
-        
-       console.log('Se envió correo exitosamente');
-       responseMessage.create('Se envió correo exitosamente');
+        let respuesta="";
+        console.log('Enviando correo');
+        respuesta= await CotizacionServ.sendEmail(cotizacion);
+        console.log('Se envió correo: ' + respuesta);
+        responseMessage.create('Se envió su solicitud de cotización, Ud. recibirá un correo electrónico.' +"\n" + "Uno de nuestros ejecutivo le llamará tambien." + "\n" + respuesta);
  
         return responseMessage;
     }

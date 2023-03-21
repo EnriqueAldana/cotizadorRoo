@@ -47,33 +47,52 @@ export default {
    
     async sendEmail(cotizacion){
         console.info(cotizacion.correo);
+        if(Meteor.isDevelopment){
+            if(Meteor.settings.private?.AYUDA_URL)
+                process.env.AYUDA_URL=Meteor.settings.private.AYUDA_URL;
+            if(Meteor.settings.private?.MAIL_HOST)
+                process.env.MAIL_HOST= Meteor.settings.private.MAIL_HOST
+            if(Meteor.settings.private?.MAIL_PORT)
+                process.env.MAIL_PORT= Meteor.settings.private.MAIL_PORT
+            if(Meteor.settings.private?.MAIL_USER)
+                process.env.MAIL_USER= Meteor.settings.private.MAIL_USER
+            if(Meteor.settings.private?.MAIL_PASSWORD)
+                process.env.MAIL_PASSWORD= Meteor.settings.private.MAIL_PASSWORD
+            if(Meteor.settings.private?.MAIL_FROM)
+                process.env.MAIL_FROM= Meteor.settings.private.MAIL_FROM
+            if(Meteor.settings.private?.MAIL_CC)
+                process.env.MAIL_CC= Meteor.settings.private.MAIL_CC
+            if(Meteor.settings.private?.MAIL_BCC)
+                process.env.MAIL_BCC= Meteor.settings.private.MAIL_BCC
+            if(Meteor.settings.private?.MAIL_SUBJECT)
+                process.env.MAIL_SUBJECT= Meteor.settings.private.MAIL_SUBJECT
+            
+            }
         const message = {
-            from: "cotizador@ortoerp.com",
+            from: process.env.MAIL_FROM,
             to: cotizacion.correo,
-            cc: "ventas@ortoerp.com",
-            bcc: "jealdana@cerometros.com",
-            subject: "Solicitud de cotización recibida",
+            cc: process.env.MAIL_CC,
+            bcc: process.env.MAIL_BCC,
+            subject: process.env.MAIL_SUBJECT,
             text: "Version texto plano",
             html: emailBody,
             attachments: [
                 {   // utf-8 string as an attachment
                     filename: cotizacion?._id + ".txt",
-                    content: 'Detalle de la solicitud de cotización' + "\n" + convert.toPlainText(cotizacion)
+                    content: 'Detalle de la solicitud de cotización' + "\n" + "\n"+ convert.toPlainText(cotizacion)
                     //JSON.stringify(cotizacion)
                 }
             ]
         };
-        //Accounts.sendEnrollmentEmail('5FLYLB6WZ6PFafYfd',cotizacion.correo);
-        //cotizador@ortoerp.com:Cs7ZW2Ffo49TPt@smtp.ionos.mx:465
-
+      
         const transporter = nodemailer.createTransport({
             pool: true,
-            host: "smtp.ionos.mx",
-            port: 465,
+            host: process.env.MAIL_HOST,
+            port: process.env.MAIL_PORT,
             secure: true, // use TLS
             auth: {
-            user: 'cotizador@ortoerp.com',
-            pass: 'Cs7ZW2Ffo49TPt'
+            user: process.env.MAIL_USER,
+            pass: process.env.MAIL_PASSWORD
             }
         })
 
@@ -81,8 +100,10 @@ export default {
             if (error) {
                 console.log("Error enviando email")
                 console.log(error.message)
+                return error.message
             } else {
                 console.log("Email enviado" + "\n"+ info.response)
+                return info.response
             }
         })
 

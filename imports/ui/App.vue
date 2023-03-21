@@ -11,7 +11,7 @@
       flat >
       
         <div class="text-left" style="margin-top: 40px;">
-        <img src="/img/ROO_LOGO.png" alt="Logo Cero Mts" id="Logo0Mts" height="80px" />
+        <img src="/img/ROO_LOGO3000x3000.jpg" alt="Logo Cero Mts" id="Logo0Mts" height="80px" />
         </div>
         <v-spacer></v-spacer>
         <v-toolbar-title class="font-weight-black" style="margin-top: 40px;">
@@ -174,7 +174,8 @@
                         <v-btn v-if="isHiddenSendBtn"
                           color="primary"
                           size="x-large"
-                          @click="openModalSend">Enviar solicitud
+                          @click="openModalSend">
+                          Enviar solicitud
                         </v-btn>              
                     </div>
                   </div>
@@ -357,7 +358,6 @@
         </v-footer>
        -->  
       <alert-message ref="refAlertMessage"></alert-message>
-      <loader ref="refLoader"></loader>
       <modal-remove ref="refModalRemove" v-bind:modalData="cotizacionTemp"
       @id_element="enviarCotizacion"></modal-remove>
     
@@ -367,7 +367,6 @@
 <script>
 
   import AlertMessage from "./components/Utilities/Alerts/AlertMessage";
-  import Loader from "./components/Utilities/Loaders/Loader";
   import medivaricJSON from '../data/medivaric.json'
   import VueZoomer from 'vue-zoomer'
   import ModalRemove from "./components/Utilities/Modals/ModalRemove";
@@ -376,7 +375,6 @@
       name: "App",
       components: {
           AlertMessage,
-          Loader,
           VZoomer: VueZoomer.Zoomer,
           ModalRemove
       },
@@ -416,6 +414,16 @@
                     element: {}
                 },
             cotizacion:{
+                  firstName: '',
+                  lastName: '',
+                  telefono: '',
+                  correo:'',
+                  subtotal: 0.0,
+                  iva:0.0,
+                  total: 0.0,
+                  partidas: [] ,
+                },
+                cotizacionxEnviar:{
                   firstName: '',
                   lastName: '',
                   telefono: '',
@@ -470,18 +478,46 @@
                   valid=true
               if(valid){
                 // Mandar generar cotizacion
+                // Mandar la cotizacion con solo partidas diferentes de cero
+                this.cotizacionxEnviar.firstName=this.cotizacion.firstName
+                this.cotizacionxEnviar.lastName= this.cotizacion.lastName
+                this.cotizacionxEnviar.telefono= this.cotizacion.telefono
+                this.cotizacionxEnviar.correo= this.cotizacion.correo
+                const fecha = new Date(new Date().toUTCString());
+                this.cotizacionxEnviar._id=fecha.toString();
+                this.cotizacionxEnviar.subtotal= this.cotizacion.subtotal
+                this.cotizacionxEnviar.iva = this.cotizacion.iva
+                this.cotizacionxEnviar.total = this.cotizacion.total
 
+                this.cotizacion.partidas.forEach((item, index) => {
+                  if(item.PPPSinIVA > 0){
+                    item.chica = item.chica.toString();
+                    item.mediana = item.mediana.toString();
+                    item.grande = item.grande.toString();
+                    item.extragrande = item.extragrande.toString();
+                    this.cotizacionxEnviar.partidas.push(item)
+                  }
+                })
                 
-                this.$refs.refAlertMessage.showAlertFull("star", "success",
-                  "Enviando...", '', 10000, '', 'top', "Se envió su cotización y recibirá un correo de confirmación.");
-                this.inicializacionACeros()
-                }else{
+                  console.log("Cotizacion: ", this.cotizacionxEnviar);
+                  Meteor.call('cotizacion.save',{cotizacion:this.cotizacionxEnviar},(error,response) => {
+                    this.$refs.refAlertMessage.showAlertFull("star", "success",
+                    "Enviando...", '', 1000, '', 'top', "Se envió su cotización y recibirá un correo de confirmación.");
+                 
+                    if(error){
+                      this.$refs.refAlertMessage.showAlertFull("question", "error",
+                      "Error...", '', 10000, '', 'top', error.reason);
+                    }else{
+                      this.inicializacionACeros()
+                      this.$refs.refAlertMessage.showAlertFull("star", "success",
+                      "Se envió su solicitud de cotización...", 'top', 10000, '', 'top', response.message);
+                     }
+                  }); 
+              }else{
                 this.$refs.refAlertMessage.showAlertFull("question", "error",
                   "Hay un Error", '', 5000, '', 'top', "Revise los datos del cliente y agregue al menos una partida.");
-             
               }
-              
-              
+
             },
             save(item,key) {
               let er=false
@@ -532,22 +568,15 @@
                   this.isHiddenSendBtn=false
                 }
                       
-                //this.subtotal.toFixed(2)
-                //this.iva.toFixed(2)
-                //this.total.toFixed(2)
-                //alert("Subtotal: " + this.subtotal)
-                //alert("IVA: " + this.subtotal * 0.16)
-                //alert("Total: " + this.subtotal * 1.16)
                 if(er){
                   this.$refs.refAlertMessage.showAlertFull("question", "error",
                   "Hay un Error", '', 5000, '', 'top', "Debe escribir un numero entero de cajas. Hay un dato equivocado.");
                
                 }else{
                   this.$refs.refAlertMessage.showAlertFull("star", "success",
-                  "Guardando...", '', 5000, '', 'bottom', "Se actualizó su cotización.");
+                  "Guardando...", '', 2000, '', 'top', "Se actualizó su cotización.");
                 }
-                
-               
+
             },
             cancel(item,key) {},
             open(item,key) {
@@ -555,9 +584,10 @@
             },
             close(item,key) {},
             openAyuda(){
-              //window.open(process.env.AYUDA_URL, '_blank');
-              //window.open( 'https://www.youtube.com/watch?v=9i1TtTkAIjs', '_blank');
-              window.open( this.ayudaURL, '_blank');
+             // window.open(process.env.AYUDA_URL, '_blank');
+            window.open( 'https://www.youtube.com/watch?v=9i1TtTkAIjs', '_blank');
+             // console.log("URL de Ayuda: " + process.env.AYUDA_URL);
+              //window.open( this.ayudaURL, '_blank');
               
             },
           openAlert() {
@@ -591,15 +621,8 @@
             this.$refs.form.resetValidation()
           },
           openModalSend() {
-             // Validar que tengamos datos completos de la cotizacion
-             
-             
-              this.cotizacionTemp.element = this.cotizacion;
-              this.cotizacionTemp._id = this.cotizacion.total;
-              this.cotizacionTemp.mainNameElement = this.cotizacion.correo;
-              this.$refs.refModalRemove.dialog = true;
-            
-              
+             // Si la validadcion de los campos de la forma son validos se manda a la funcion definida en la ventana de OpenModal
+              this.$refs.refModalRemove.dialog = true; 
           },
           deleteUser(idUser) {
               console.log("Id del usuario a eliminar: ", idUser);
@@ -610,9 +633,13 @@
             this.cotizacion.iva=0.0
             this.cotizacion.total=0.0
             this.cotizacion.partidas= medivaricJSON
-          if(Meteor.settings.private?.AYUDA_URL)
-              this.ayudaURL=Meteor.settings.private.AYUDA_URL;
-          
+            if(Meteor.isDevelopment){
+                if(Meteor.settings.private?.AYUDA_URL)
+                  this.ayudaURL=Meteor.settings.private.AYUDA_URL;
+            }else{
+              this.ayudaURL=process.env.AYUDA_URL
+            }
+          console.log("URL de Ayuda: " + this.ayudaURL);
           },
           inicializacionACeros(){
             this.cotizacion.subtotal=0.0
@@ -626,6 +653,7 @@
                   item.extragrande=0
                   item.PPPSinIVA=0
                 })
+            this.cotizacionxEnviar.partidas=[]
                 // Mostrar boton
                 if(this.cotizacion.total > 0){
                   this.isHiddenSendBtn=true

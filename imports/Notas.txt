@@ -1,9 +1,18 @@
+Por hacer
+1.- Completar imagenes y archivo de carga de datos
+2.- Desplegar en servidor
+
 Arrancar aplicacion
 1.- Fijar la variable de entorno en el shell
-export MAIL_URL: "smtp://cerometros2022@gmail.com:Enrique1937$_@smtp.gmail.com:465"
-export EMAIL_SERVICES="cerometros2022@gmail.com"
-export MAIL_URL="smtp://cerometros2022@gmail.com:Enrique1937$_@smtp.gmail.com:465"
-export MONGO_URL= "mongodb://tagTemporal:tagTemporal@localhost:27017/tagTemporal?authSource=tagTemporal"
+export MAIL_HOST= "smtp.ionos.mx"
+export MAIL_PORT=465
+export MAIL_USER="cotizador@ortoerp.com"
+export MAIL_PASSWORD="Cs7ZW2Ffo49TPt"
+export MAIL_SUBJECT="Solicitud de cotización recibida"
+export MAIL_FROM="cotizador@ortoerp.com"
+export MAIL_CC="ventas@ortoerp.com"
+export MAIL_BCC="jealdana@cerometros.com"
+
 2.- Ejecutar en el shell de manera de cargar el archivo de configuracion :
 meteor --settings ./settings/settings.json
 O bien
@@ -12,8 +21,8 @@ yarn run:mac
 meteor run --port 8080
 meteor run --settings settings/settings.json --port 8080 
 
-"run:mac": "MONGO_URL=mongodb://tagTemporal:tagTemporal@localhost:27017/tagTemporal?authSource=tagTemporal meteor --settings ./settings/settings.json --port 3000",
-"MAIL_URL": "smtps://cotizador@ortoerp.com:C3r0M37r0s1937$%_Cotizador@smtp.ionos.mx:465",
+"run:mac= "MONGO_URL=mongodb://tagTemporal:tagTemporal@localhost:27017/tagTemporal?authSource=tagTemporal meteor --settings ./settings/settings.json --port 3000",
+"MAIL_URL= "smtps://cotizador@ortoerp.com:C3r0M37r0s1937$%_Cotizador@smtp.ionos.mx:465",
    
 
 Acciones para regenerar el ambiente de desarrollo
@@ -51,56 +60,56 @@ https://vuejs.org/guide/essentials/list.html
 OBJETO PRUEBAS
 {
   "cotizacion" : {
-                "_id": "1",
-                "firstName": "Enrique",
-                "lastName": "Aldana",
-                "telefono": "1234567890",
-                "correo": "jealdana@gmail.com",
-                "subtotal":10,
-                "iva":6,
-                "total": 16,
-                "partidas": [
+                "_id= "1",
+                "firstName= "Enrique",
+                "lastName= "Aldana",
+                "telefono= "1234567890",
+                "correo= "jealdana@gmail.com",
+                "subtotal=10,
+                "iva=6,
+                "total= 16,
+                "partidas= [
                   {
-        "id": 10,
-        "imagen":"http://storage.googleapis.com/cerometros.appspot.com/users/5FLYLB6WZ6PFafYfd/avatar69.jpeg",  
+        "id= 10,
+        "imagen="http://storage.googleapis.com/cerometros.appspot.com/users/5FLYLB6WZ6PFafYfd/avatar69.jpeg",  
       
-      "marca": "MEDIVARIC",
-      "familiadeproducto": "Medias",
-      "categoria": "Baja compresión 8-15 mmHg",
-      "rowColor": "blue",
-      "referencia": "MV-5613p",
-      "producto": "Calcetín Unisex para Pie Sensible ‐ Miracle Socks con Fibra de Cobre",
-      "color": "Azul",
-      "chica": 1,
-      "mediana": 0,
-      "grande": 0,
-      "extragrande": 0,
-      "precio": 290,
-      "PVPSinIVA": 461.21,
-      "Ganancia": 59.04,
-      "PPPSinIVA": 0.0,
-      "precioxpartida":0.0
+      "marca= "MEDIVARIC",
+      "familiadeproducto= "Medias",
+      "categoria= "Baja compresión 8-15 mmHg",
+      "rowColor= "blue",
+      "referencia= "MV-5613p",
+      "producto= "Calcetín Unisex para Pie Sensible ‐ Miracle Socks con Fibra de Cobre",
+      "color= "Azul",
+      "chica= 1,
+      "mediana= 0,
+      "grande= 0,
+      "extragrande= 0,
+      "precio= 290,
+      "PVPSinIVA= 461.21,
+      "Ganancia= 59.04,
+      "PPPSinIVA= 0.0,
+      "precioxpartida=0.0
     },
     {
-        "id": 20,
-        "imagen":"http://storage.googleapis.com/cerometros.appspot.com/users/5FLYLB6WZ6PFafYfd/avatar69.jpeg",  
+        "id= 20,
+        "imagen="http://storage.googleapis.com/cerometros.appspot.com/users/5FLYLB6WZ6PFafYfd/avatar69.jpeg",  
       
-      "marca": "MEDIVARIC",
-      "familiadeproducto": "Medias",
-      "categoria": "Baja compresión 8-15 mmHg",
-      "rowColor": "black",
-      "referencia": "MV-5613p",
-      "producto": "Calcetín Unisex para Pie Sensible ‐ Miracle Socks con Fibra de Cobre",
-      "color": "Azul",
-      "chica": 0,
-      "mediana": 1,
-      "grande": 0,
-      "extragrande": 0,
-      "precio": 290,
-      "PVPSinIVA": 461.21,
-      "Ganancia": 59.04,
-      "PPPSinIVA": 0.0,
-      "precioxpartida":0.0
+      "marca= "MEDIVARIC",
+      "familiadeproducto= "Medias",
+      "categoria= "Baja compresión 8-15 mmHg",
+      "rowColor= "black",
+      "referencia= "MV-5613p",
+      "producto= "Calcetín Unisex para Pie Sensible ‐ Miracle Socks con Fibra de Cobre",
+      "color= "Azul",
+      "chica= 0,
+      "mediana= 1,
+      "grande= 0,
+      "extragrande= 0,
+      "precio= 290,
+      "PVPSinIVA= 461.21,
+      "Ganancia= 59.04,
+      "PPPSinIVA= 0.0,
+      "precioxpartida=0.0
     }
                   
                   ] 
@@ -109,15 +118,15 @@ OBJETO PRUEBAS
 
 // usuario
 {
-  "user": {
-                "_id": null,
-                "username": "Enrique Aldana",
+  "user= {
+                "_id= null,
+                "username= "Enrique Aldana",
              
-                "emails": [{"address": "jealdana@cerometros.com", "verified": false}],
-                "profile": {
-                    "profile": "ClienteROO",
-                    "name": "Enrique",
-                    "lastName": "Aldana"
+                "emails= [{"address= "jealdana@cerometros.com", "verified= false}],
+                "profile= {
+                    "profile= "ClienteROO",
+                    "name= "Enrique",
+                    "lastName= "Aldana"
                 }
                 }
 }
@@ -133,3 +142,6 @@ https://github.com/Hernanm0g/meteor_vuetify/blob/master/package.json
 
 Imagen de Logo
 https://firebasestorage.googleapis.com/v0/b/ortoerp.appspot.com/o/ROO_LOGOGrande.jpg?alt=media&token=9d467a04-0099-4499-a426-4ec186111631
+
+
+
