@@ -218,7 +218,7 @@
           <v-data-table
             :headers="headers" 
             :items="cotizacion.partidas" 
-            :items-per-page="100"
+            :items-per-page="1000"
             :search="search"
             
             multi-sort
@@ -307,7 +307,7 @@
                                     <div v-if="key ===1">
                                         <div class="d-flex align-center pt-5 pb-5">
                                             
-                                              <v-zoomer style="width: 177px; height: 335px; ">
+                                              <v-zoomer style="width: 88px; height: 168px; ">
                                                 <img
                                                   :src="item[header.value] || '/img/user.png'"
                                                   style="object-fit: contain; width: 100%; height: 100%;"
@@ -322,12 +322,9 @@
                                           </div>
                                     </div>
                                     <div v-else>
-                                      <h3>
+                                      <h4>
                                         {{item[header.value]}}
-                                      </h3>
-                                          
-                                        
-                                     
+                                      </h4>
                                       
                                     </div> 
                                 </div>  
@@ -520,6 +517,7 @@
 
             },
             save(item,key) {
+              console.info(item);
               let er=false
                 let parcialCH=0.0
                 if(isNaN(item.chica)){
@@ -552,13 +550,21 @@
                 }else{
                   parcialEG=(item.precio * item.extragrande)
                 }
+                //console.info(parcialCH);
+                //console.info(parcialMED);
+                //console.info(parcialGDE);
+                //console.info(parcialEG);
                 item.PPPSinIVA=  parcialCH+ parcialMED + parcialGDE + parcialEG;
                 this.cotizacion.subtotal=0.0
+                //var cont=0;
                 //console.log(this.partidas)
                 this.cotizacion.partidas.forEach((item, index) => {
-                  //console.log(item)
+                  //console.log(cont++)
+                  //console.info("PPPSinIVA" + item.PPPSinIVA);
                   this.cotizacion.subtotal = this.cotizacion.subtotal + item.PPPSinIVA
                 })
+                //console.info("Subtotal" + this.cotizacion.subtotal);
+
                 this.cotizacion.iva= this.cotizacion.subtotal * 0.16
                 this.cotizacion.total = this.cotizacion.subtotal + this.cotizacion.iva
                 // Mostrar boton
@@ -697,5 +703,8 @@
 }
 .yellow {
   background-color: yellow;
+}
+.white {
+  background-color: rgb(247, 247, 247);
 }
 </style>
